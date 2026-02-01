@@ -12,3 +12,11 @@ while True:
         print(blue.keys())
     elif 3==ask:
         print(blue.values())
+    elif 4==ask:
+        country2=input("choose a country")
+        print(blue[country2])
+    elif 5==ask:
+        altf4=input("what do you want to remove? ")
+        del(blue[altf4])
+    elif 6==ask:
+        break
