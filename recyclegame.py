@@ -51,3 +51,35 @@ def layoutitems(itemstolayout):
     for i,j in enumerate(itemstolayout):
         newx=(i+1)*gapsize
         j.x=newx
+def animateitems(itemstoanimate):
+    global animations
+    for i in itemstoanimate:
+        duration=startspeed-currentlevel
+        i.anchor=("center","bottom")
+        animation=animate(i, duration=duration, on_finished=handle_gameover, y=HEIGHT)
+        animations.append(animation)
+def handle_gameover():
+    global gameover
+    gameover=True
+def on_mouse_down(pos):
+    global items, currentlevel
+    for i in items:
+        if i.collidepoint(pos):
+            if "paper" in i.image:
+                handle_gamecomplete()
+            else:
+                handle_gameover()
+def handle_gamecomplete():
+    global currentlevel, items, animations, gamecomplete
+    stop_animations(animations)
+    if currentlevel==levels:
+        gamecomplete=True
+    else:
+        currentlevel+=1
+        items=[]
+        animations=[]
+def stop_animations(animationstostop):
+    for i in animationstostop:
+        if i.running:
+            i.stop()
+pgzrun.go()
