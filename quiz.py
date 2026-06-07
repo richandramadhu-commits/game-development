@@ -42,4 +42,59 @@ def draw():
     screen.draw.filled_rect(sb,"green")
     for i in ab:
         screen.draw.filled_rect(i,"dark blue")
+    message="welcome to the quiz game" 
+    message=message+f"Q:{index} of {count}"
+    screen.draw.textbox(message,mbox,color="white")
+    screen.draw.textbox(str (timeleft),tb,color="green")
+    screen.draw.textbox("Skip",sb,color="brown")
+    screen.draw.textbox(question[0].strip(),qbox,color="yellow")
+    j=1
+    for i in ab:
+        screen.draw.textbox(question[j].strip(),i,color="green")
+        j+=1
+def readnextquestion():
+    global index
+    index+=1
+    return questions.pop(0).split(",")
+readquestion()
+question=readnextquestion()
+def correctanswer():
+    global score,question,timeleft,questions
+    score+=1
+    if questions:
+        question=readnextquestion()
+        timeleft=10
+    else:
+        gameover()
+def gameover():
+    global question, timeleft, is_gameover
+    message=f"gameover\nyou got {score} questions correct"
+    question=[message,"-","-","-","-",5]
+    timeleft=0
+    is_gameover=True
+def skipquestion():
+    global question, timeleft
+    if questions and not is_gameover:
+        question=readnextquestion()
+        timeleft=10
+    else:
+        gameover()
+def on_mouse_down(pos):
+    j=1
+    for i in ab:
+        if i.collidepoint(pos):
+            if j is int(question[5]):
+                correctanswer()
+            else:
+                gameover()
+        j+=1
+    if sb.collidepoint(pos):
+        skipquestion()
+def timer():
+    global timeleft
+    if timeleft:
+        timeleft-=1
+    else:
+        gameover()
+clock.schedule_interval(timer,1)
 pgzrun.go()
